@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio Cá Nhân | Đỗ Tuân Anh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-glass: rgba(255, 255, 255, 0.95);
+            --danger: #ef4444;
+            --success: #10b981;
+            --fb: #1877f2;
+            --insta: #e1306c;
+            --tiktok: #000000;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .page {
+            display: none;
+            width: 100%;
+            max-width: 420px;
+            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--bg-glass);
+            border-radius: 30px;
+            padding: 35px 25px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Avatar Animation */
+        .avatar-wrapper {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 20px;
+            padding: 4px;
+            background: linear-gradient(45deg, var(--primary), #ec4899, var(--success));
+            border-radius: 50%;
+            animation: rotateBg 4s linear infinite;
+        }
+
+        @keyframes rotateBg {
+            to { transform: rotate(360deg); }
+        }
+
+        .profile-img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            background: white;
+            animation: rotateBg 4s linear infinite reverse;
+        }
+
+        h2 { font-weight: 800; color: #1e293b; margin-bottom: 5px; }
+        .subtitle { color: var(--primary); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; }
+
+        /* Social Links */
+        .social-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            text-decoration: none;
+            color: #334155;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .link-item i { font-size: 20px; width: 35px; }
+        .link-item:hover {
+            transform: translateX(8px);
+            background: #fff;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .link-item.fb:hover { color: var(--fb); border-color: var(--fb); }
+        .link-item.insta:hover { color: var(--insta); border-color: var(--insta); }
+        .link-item.tiktok:hover { color: var(--tiktok); border-color: var(--tiktok); }
+
+        /* Buttons & Inputs */
+        input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 1px solid #cbd5e1;
+            margin-bottom: 15px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        .toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            padding: 12px 25px; border-radius: 50px;
+            color: white; font-size: 0.9rem; z-index: 1000; display: none;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast" class="toast"></div>
+
+    <!-- BIO PAGE (TRANG CHỦ) -->
+    <div id="page-bio" class="page active">
+        <div class="card">
+            <div class="avatar-wrapper">
+                <img src="https://scontent.fhph1-2.fna.fbcdn.net/v/t39.30808-6/672683087_122160965534739682_1301149836854494348_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=L5kMKXv0ocoQ7kNvwHXdVG3&_nc_oc=AdppVVgBmBGVUUEDDRDcdXCEukJR6kDuX-d8encmKDkCgALJVY28oPefPtON15Hra2DuBkhLNC0JY2YLhBA_efIe&_nc_zt=23&_nc_ht=scontent.fhph1-2.fna&_nc_gid=AkVecYX_hvnAepxWHcdhEA&_nc_ss=7b2a8&oh=00_Af2zfpqk9YX8RqecE1SklftKET-a3DQLyB11Zq9OgF8X0A&oe=69F28B9D" 
+                     class="profile-img" alt="Đỗ Tuân Anh" 
+                     onerror="this.src='https://ui-avatars.com/api/?name=Tuan+Anh&background=2563eb&color=fff'">
+            </div>
+            <h2>Đỗ Tuân Anh</h2>
+            <p class="subtitle">Cloud Pro Community</p>
+            
+            <div class="social-container">
+                <!-- LINK FACEBOOK CHÍNH THỨC -->
+                <a href="https://www.facebook.com/tuan.anh.do.970301" target="_blank" class="link-item fb">
+                    <i class="fab fa-facebook"></i> <span>Facebook cá nhân</span>
+                </a>
+                <!-- LINK INSTAGRAM CHÍNH THỨC -->
+                <a href="https://www.instagram.com/tuananhdo.em?igsh=MWQxOXY3MG13NjA1Yg%3D%3D&utm_source=qr" target="_blank" class="link-item insta">
+                    <i class="fab fa-instagram"></i> <span>Instagram Profile</span>
+                </a>
+                <!-- LINK TIKTOK CHÍNH THỨC -->
+                <a href="https://www.tiktok.com/@ttmd_tuananh?is_from_webapp=1&sender_device=pc" target="_blank" class="link-item tiktok">
+                    <i class="fab fa-tiktok"></i> <span>TikTok Channel</span>
+                </a>
+                <a href="https://github.com/dotuananh" target="_blank" class="link-item">
+                    <i class="fab fa-github"></i> <span>Dự án GitHub</span>
+                </a>
+            </div>
+
+            <button class="btn" onclick="navTo('page-login')" style="background: #1e293b;">
+                <i class="fas fa-lock"></i> Khu Vực Thành Viên
+            </button>
+        </div>
+    </div>
+
+    <!-- CÁC TRANG CÒN LẠI -->
+    <div id="page-register" class="page">
+        <div class="card">
+            <h3>Đăng Ký Thành Viên</h3>
+            <p style="font-size: 0.8rem; margin: 15px 0; color: #64748b;">Hệ thống sẽ gửi OTP về Email</p>
+            <input type="text" id="reg-name" placeholder="Họ và tên">
+            <input type="email" id="reg-email" placeholder="Địa chỉ Email">
+            <input type="password" id="reg-pass" placeholder="Mật khẩu">
+            <button class="btn" id="btn-reg" onclick="handleRegister()">Gửi Mã OTP</button>
+            <p style="margin-top: 15px; font-size: 0.85rem; cursor: pointer; color: var(--primary);" onclick="navTo('page-login')">Đã có tài khoản? Đăng nhập</p>
+        </div>
+    </div>
+
+    <div id="page-otp" class="page">
+        <div class="card">
+            <h3>Xác Thực Email</h3>
+            <p style="font-size: 0.8rem; margin: 15px 0; color: #64748b;">Nhập mã 6 số bạn vừa nhận được</p>
+            <input type="text" id="otp-input" placeholder="Mã OTP" maxlength="6" style="text-align: center; font-size: 1.5rem; letter-spacing: 10px; font-weight: 800;">
+            <button class="btn" onclick="verifyOTP()">Xác Nhận Đăng Ký</button>
+        </div>
+    </div>
+
+    <div id="page-login" class="page">
+        <div class="card">
+            <h3>Đăng Nhập</h3>
+            <input type="email" id="login-email" placeholder="Email">
+            <input type="password" id="login-pass" placeholder="Mật khẩu">
+            <button class="btn" onclick="login()">Truy Cập Ngay</button>
+            <p style="margin-top: 15px; font-size: 0.85rem; cursor: pointer; color: var(--primary);" onclick="navTo('page-register')">Chưa có tài khoản? Tạo mới</p>
+            <p style="margin-top: 10px; font-size: 0.75rem; opacity: 0.5; cursor: pointer;" onclick="navTo('page-bio')">Quay lại trang chủ</p>
+        </div>
+    </div>
+
+    <script>
+        const PUBLIC_KEY = "Z36XXXuc31k0qfEQd";
+        const SERVICE_ID = "service_3s1k5c7";
+        const TEMPLATE_ID = "template_11t1e2j";
+
+        emailjs.init(PUBLIC_KEY);
+
+        let users = JSON.parse(localStorage.getItem('my_app_users')) || [];
+        let tempUser = null;
+        let currentOTP = null;
+
+        function navTo(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function showToast(msg, success = false) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.background = success ? "#10b981" : "#ef4444";
+            t.style.display = "block";
+            setTimeout(() => t.style.display = "none", 3000);
+        }
+
+        async function handleRegister() {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const pass = document.getElementById('reg-pass').value;
+            if(!name || !email || !pass) return showToast("Vui lòng điền đủ thông tin");
+            currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            tempUser = { name, email, pass };
+            const btn = document.getElementById('btn-reg');
+            btn.innerText = "Đang gửi...";
+            btn.disabled = true;
+            try {
+                await emailjs.send(SERVICE_ID, TEMPLATE_ID, { user_name: name, user_email: email, otp_code: currentOTP });
+                showToast("Đã gửi OTP!", true);
+                navTo('page-otp');
+            } catch (err) {
+                showToast("Lỗi gửi mail. Hãy thử lại!");
+            } finally {
+                btn.innerText = "Gửi Mã OTP";
+                btn.disabled = false;
+            }
+        }
+
+        function verifyOTP() {
+            const input = document.getElementById('otp-input').value;
+            if(input === currentOTP) {
+                users.push(tempUser);
+                localStorage.setItem('my_app_users', JSON.stringify(users));
+                showToast("Đăng ký thành công!", true);
+                navTo('page-login');
+            } else {
+                showToast("Mã OTP không chính xác");
+            }
+        }
+
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            const user = users.find(u => u.email === email && u.pass === pass);
+            if(user || (email === "tuananhdo.em@gmail.com" && pass === "TranThiMyDuyen")) {
+                showToast("Chào mừng " + (user ? user.name : "Admin") + "!", true);
+                navTo('page-bio');
+            } else {
+                showToast("Sai thông tin đăng nhập");
+            }
+        }
+    </script>
+</body>
+</html>
